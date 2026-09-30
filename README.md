@@ -34,8 +34,5 @@ La aplicación lee las sugerencias desde el microservicio principal (Python). Si
 
 Para probarlo: suspender el servicio Python en Render y recargar `/sugerencias/`.
 
-## Repositorio
-
-https://github.com/TU_USUARIO/ProyectoF
 
 La IA que fue utilizada fue Groq. Procurar tener todo corriendo antes de preguntarle algo.
