@@ -1,0 +1,14 @@
+{
+  "name": "ms-lectura-respaldo-node",
+  "version": "1.0.0",
+  "description": "Microservicio de RESPALDO para lectura de sugerencias (Node.js). Se usa cuando el servicio Python falla.",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

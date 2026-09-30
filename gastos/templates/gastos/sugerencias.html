@@ -1,0 +1,52 @@
+{% extends 'gastos/base.html' %}
+{% load humanize %}
+{% block titulo %}Sugerencias · Cuentas Claras{% endblock %}
+{% block contenido %}
+<h2>💡 Gastos frecuentes</h2>
+<p class="muted">Datos traídos desde nuestros microservicios (MongoDB en la nube).</p>
+{% if mensaje %}<section><p>{{ mensaje }}</p></section>{% endif %}
+{% if error %}
+  <section><p class="neg">{{ error }}</p></section>
+{% else %}
+  {% if origen != 'principal (Python)' %}
+    <section><p class="muted">⚠️ El servicio principal no respondió; mostrando datos desde el <strong>{{ origen }}</strong>.</p></section>
+  {% endif %}
+  <section>
+    <ul>
+      {% for s in sugerencias %}
+        <li>
+          <span>{{ s.emoji }} {{ s.nombre }}</span>
+          <span>≈ ${{ s.monto_sugerido|intcomma }}
+            <form method="post" action="{% url 'sugerencia-borrar' s.id %}" style="display:inline">
+              {% csrf_token %}<button type="submit" title="Eliminar (microservicio Java)">🗑️</button>
+            </form>
+          </span>
+        </li>
+        <li>
+          <details><summary class="muted">✏️ Editar</summary>
+            <form method="post" action="{% url 'sugerencia-actualizar' s.id %}">
+              {% csrf_token %}
+              <input name="nombre" value="{{ s.nombre }}" maxlength="60" required>
+              <input name="emoji" value="{{ s.emoji }}" maxlength="4" size="4">
+              <input name="monto_sugerido" type="number" min="1" value="{{ s.monto_sugerido }}" required>
+              <button type="submit" title="Actualizar (microservicio Go)">Guardar</button>
+            </form>
+          </details>
+        </li>
+      {% empty %}<li class="muted">Sin sugerencias.</li>{% endfor %}
+    </ul>
+  </section>
+{% endif %}
+
+<section>
+  <h3>➕ Nueva sugerencia <small class="muted">(microservicio Node.js)</small></h3>
+  <form method="post" action="{% url 'sugerencia-crear' %}">
+    {% csrf_token %}
+    <input name="nombre" placeholder="Nombre" maxlength="60" required>
+    <input name="emoji" placeholder="Emoji" maxlength="4" size="4">
+    <input name="monto_sugerido" type="number" min="1" placeholder="Monto COP" required>
+    <button type="submit">Agregar</button>
+  </form>
+</section>
+<p><a href="{% url 'inicio' %}">← Volver</a></p>
+{% endblock %}

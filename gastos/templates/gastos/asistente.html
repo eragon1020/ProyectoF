@@ -1,0 +1,31 @@
+{% extends 'gastos/base.html' %}
+{% block titulo %}Asistente IA · Cuentas Claras{% endblock %}
+{% block contenido %}
+<h2>🤖 Asistente de gastos compartidos</h2>
+<p class="muted">
+  Hazle una pregunta a una IA externa (Groq, con modelos Llama) sobre cómo
+  dividir gastos compartidos, saldos entre personas, o el uso de esta app.
+</p>
+
+<section>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.pregunta }}
+    {{ form.pregunta.errors }}
+    <button type="submit">Preguntar</button>
+  </form>
+</section>
+
+{% if error %}
+  <section><p class="neg">{{ error }}</p></section>
+{% endif %}
+
+{% if respuesta %}
+  <section>
+    <p class="muted">Tu pregunta: <em>{{ pregunta }}</em></p>
+    <p>{{ respuesta|linebreaksbr }}</p>
+  </section>
+{% endif %}
+
+<p><a href="{% url 'inicio' %}">← Volver</a></p>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'gastos/base.html' %}
+{% load humanize %}
+{% block titulo %}{{ grupo.nombre }} · Cuentas Claras{% endblock %}
+{% block contenido %}
+<h2>{{ grupo.nombre }}</h2>
+<p class="muted">Total gastado: <strong>${{ total|intcomma }}</strong></p>
+
+<section>
+  <h3>Personas</h3>
+  <ul>
+    {% for m in grupo.miembros.all %}<li>{{ m.nombre }}</li>{% empty %}<li class="muted">Agrega a la primera persona.</li>{% endfor %}
+  </ul>
+  <form method="post">{% csrf_token %}
+    {{ form_miembro.as_p }}
+    <button name="agregar_miembro">Agregar persona</button>
+  </form>
+</section>
+
+{% if grupo.miembros.exists %}
+<section>
+  <h3>Nuevo gasto</h3>
+  <form method="post">{% csrf_token %}
+    {{ form_gasto.as_p }}
+    <button name="agregar_gasto">Agregar gasto</button>
+  </form>
+</section>
+
+<section>
+  <h3>Gastos</h3>
+  <ul>
+    {% for x in grupo.gastos.all %}
+      <li>
+        <span>{{ x.descripcion }} <span class="muted">· {{ x.pagado_por }}</span></span>
+        <span>${{ x.monto|intcomma }}
+          <form class="inline" method="post" action="{% url 'borrar-gasto' x.id %}">{% csrf_token %}<button class="borrar" title="Borrar">✕</button></form>
+        </span>
+      </li>
+    {% empty %}<li class="muted">Sin gastos todavía.</li>{% endfor %}
+  </ul>
+</section>
+
+<section>
+  <h3>✅ Para quedar a mano</h3>
+  <ul>
+    {% for deudor, acreedor, monto in pagos %}
+      <li><span>{{ deudor }} → {{ acreedor }}</span><span class="pos">${{ monto|intcomma }}</span></li>
+    {% empty %}<li class="muted">Todos están a paz y salvo 🎉</li>{% endfor %}
+  </ul>
+  <p class="muted">Saldos individuales:</p>
+  <ul>
+    {% for m, s in saldos %}
+      <li><span>{{ m }}</span><span class="{% if s >= 0 %}pos{% else %}neg{% endif %}">{{ s|intcomma }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<form method="post" action="{% url 'borrar-grupo' grupo.id %}" onsubmit="return confirm('¿Borrar este grupo?')">{% csrf_token %}
+  <button class="borrar">Borrar grupo</button>
+</form>
+{% endblock %}

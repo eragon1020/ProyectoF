@@ -1,0 +1,23 @@
+{% extends 'gastos/base.html' %}
+{% block contenido %}
+<p class="muted">Divide gastos entre amigos, parceros o compañeros de apartamento y mira quién le debe a quién.</p>
+
+<section>
+  <h2>Nuevo grupo</h2>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button>Crear grupo</button>
+  </form>
+</section>
+
+<section>
+  <h2>Tus grupos</h2>
+  <ul>
+    {% for g in grupos %}
+      <li><a href="{% url 'grupo' g.id %}">{{ g.nombre }}</a><span class="muted">{{ g.miembros.count }} personas</span></li>
+    {% empty %}
+      <li class="muted">Aún no hay grupos.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

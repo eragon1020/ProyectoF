@@ -1,0 +1,35 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Cuentas Claras{% endblock %}</title>
+  <style>
+    :root { --verde:#1b7f5c; --rojo:#c0392b; --gris:#f4f4f2; --borde:#ddd; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 0 auto; padding: 1rem; color:#222; background:#fff; }
+    h1 a { color: inherit; text-decoration: none; }
+    section { background: var(--gris); border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+    input, select, button { font: inherit; padding: .5rem; border:1px solid var(--borde); border-radius:6px; }
+    input, select { width: 100%; margin: .25rem 0 .5rem; }
+    button { background: var(--verde); color:#fff; border:0; cursor:pointer; }
+    button.borrar { background: none; color: var(--rojo); padding: 0 .4rem; }
+    ul { list-style:none; padding:0; margin:0; }
+    li { display:flex; justify-content:space-between; align-items:center; padding:.4rem 0; border-bottom:1px solid var(--borde); }
+    li:last-child { border-bottom:0; }
+    .pos { color: var(--verde); font-weight:600; } .neg { color: var(--rojo); font-weight:600; }
+    .errorlist { color: var(--rojo); list-style:none; padding:0; margin:0; }
+    .muted { color:#777; font-size:.9rem; }
+    form.inline { display:inline; }
+    @media (prefers-color-scheme: dark) {
+      body { background:#181818; color:#eee; } section { background:#242424; }
+      input, select { background:#111; color:#eee; border-color:#444; } li { border-color:#333; }
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="{% url 'inicio' %}">💸 Cuentas Claras</a></h1>
+  <nav class="muted"><a href="{% url 'inicio' %}">Grupos</a> · <a href="{% url 'sugerencias' %}">Sugerencias</a> · <a href="{% url 'asistente' %}">Asistente IA</a></nav>
+  {% block contenido %}{% endblock %}
+</body>
+</html>
